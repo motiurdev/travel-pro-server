@@ -76,7 +76,15 @@ async function run() {
                 },
             };
             const result = await orderCollection.updateOne(filter, updateDoc, options)
+            res.send(result)
+        })
 
+        // add booking
+        app.post('/addOrder', async (req, res) => {
+            const data = req.body;
+            const result = await serviceCollection.insertOne(data)
+            res.send(result)
+            console.log(result);
         })
     } finally {
         // await client.close();
