@@ -47,7 +47,6 @@ async function run() {
             // const id = req.params.email;
             // const item = { _id: objectId(id) };
             const result = await orderCollection.find({ email: req.params.email }).toArray();
-            console.log(result);
             res.send(result)
         })
 
@@ -56,8 +55,28 @@ async function run() {
             const id = req.params.deleteId;
             const item = { _id: objectId(id) };
             const result = await orderCollection.deleteOne(item)
-            console.log(result);
-            res.send(result.deletedCount)
+            res.send(result)
+        })
+
+        // get all booking
+        app.get('/allBooking', async (req, res) => {
+            const result = await orderCollection.find({}).toArray();
+            res.send(result)
+        })
+
+        // update status
+        app.put(`/updateStatus/:id`, async (req, res) => {
+            const id = req.params.id;
+            const updateData = req.body;
+            const filter = { _id: objectId(id) };
+            const options = { upsert: true };
+            const updateDoc = {
+                $set: {
+                    status: updateData.status = "approved"
+                },
+            };
+            const result = await orderCollection.updateOne(filter, updateDoc, options)
+
         })
     } finally {
         // await client.close();
